@@ -12,10 +12,14 @@
       --lighter: #1a1a1a;
       --highlight: #2bbf7d;
       --player-bg: #222;
-      --player-active: #00ff88;
       --player-inactive: #555;
+      --light-bg: #f4f4f4;
+      --light-green: #00c858;
+      --light-text: #333;
     }
-
+    h1{
+        color: #00ff88;
+    }
     * {
       box-sizing: border-box;
       margin: 0;
@@ -26,6 +30,10 @@
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg);
       color: var(--green);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* Garantindo que o body ocupe toda a altura da tela */
+      transition: background-color 0.3s, color 0.3s;
     }
 
     /* Página de Carregamento */
@@ -38,29 +46,13 @@
       background: var(--bg);
       color: var(--green);
       text-align: center;
+      opacity: 1;
+      transition: opacity 0.5s;
     }
 
     .loading-page h1 {
       font-size: 2.5em;
       margin-bottom: 20px;
-    }
-
-    .loading-page .icons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    .loading-page .icons i {
-      font-size: 3em;
-      color: var(--green);
-      animation: rotate 2s infinite linear;
-    }
-
-    @keyframes rotate {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
 
     .loading-page .progress-bar-container {
@@ -83,65 +75,59 @@
       display: none;
     }
 
-    /* Conteúdo do site */
+    /* Cabeçalho */
     header {
-      background: linear-gradient(135deg, #111, #222);
-      padding: 1.5em;
+      /*background: url('img/fundo.jpg') no-repeat center center;*/
+      background-size: cover;
+      padding: 2em;
       text-align: center;
+      color: #fff;
       border-bottom: 2px solid var(--green);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
 
     header h1 {
-      font-size: 2.2em;
-      color: var(--green);
+      font-size: 3em;
       margin-bottom: 0.5em;
     }
 
     header p {
-      font-size: 1.1em;
-      color: #aaa;
+      font-size: 1.3em;
     }
 
-    #refresh-btn {
-      margin-top: 0.5em;
-      padding: 8px 20px;
-      background: var(--green);
-      border: none;
-      color: #000;
-      font-weight: bold;
-      border-radius: 25px;
-      cursor: pointer;
-      font-size: 1em;
-    }
-
-    main {
-      padding: 1.5em;
-      padding-bottom: 180px;
-    }
-
+    /* Estilo dos Episódios */
     .episode {
       background: var(--lighter);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       border-left: 5px solid var(--green);
       border-radius: 12px;
       padding: 16px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.3s, background 0.3s;
     }
 
     .episode:hover {
       background: #222;
       transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
-    .episode.played {
-      opacity: 0.6;
+    .episode img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
     .episode h3 {
-      font-size: 1.3em;
-      margin-bottom: 5px;
+      font-size: 1.2em;
       color: var(--green);
+      margin-bottom: 5px;
+      text-align: center;
     }
 
     .episode small {
@@ -149,49 +135,50 @@
       color: #aaa;
     }
 
+    /* Footer e Player de Áudio */
     footer {
+      background: var(--player-bg);
+      padding: 1em;
+      border-top: 2px solid var(--green);
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--player-bg);
-      border-top: 2px solid var(--green);
-      padding: 1em;
-      text-align: center;
       z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     #now-playing {
       font-size: 1em;
-      margin-bottom: 5px;
       color: var(--green);
       font-weight: bold;
+      margin-bottom: 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     #audio-player-container {
-      width: 90%;
-      margin-top: 15px;
       display: flex;
-      align-items: center;
-      justify-content: center;
       flex-direction: column;
+      align-items: center;
+      width: 100%;
     }
 
     #audio-player {
-      width: 100%;
+      width: 90%;
       height: 5px;
       background-color: var(--player-inactive);
       border-radius: 5px;
+      margin-top: 10px;
     }
 
-    #audio-player-container div {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .time-display {
+      font-size: 0.9em;
+      color: var(--green);
+      margin-top: 10px;
     }
 
     .player-btn {
@@ -200,60 +187,123 @@
       color: var(--green);
       font-size: 1.5em;
       cursor: pointer;
+      margin: 0 10px;
     }
 
     .player-btn:hover {
       color: var(--highlight);
     }
+
+    .volume-control {
+      width: 80%;
+      height: 5px;
+      background-color: var(--player-inactive);
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    /* Responsividade */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2em;
+      }
+
+      .episode img {
+        width: 150px;  /* Imagem ajustada para telas intermediárias */
+        height: 150px;
+      }
+
+      footer {
+        padding: 0.8em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.5em;
+      }
+
+      .episode img {
+        width: 120px;  /* Imagem menor para telas muito pequenas */
+        height: 120px;
+      }
+
+      footer {
+        padding: 0.5em;
+        /* Ajuste no padding para garantir que o footer não sobreponha conteúdo */
+      }
+
+      #audio-player {
+        width: 100%; /* Player de áudio ocupa toda a largura da tela */
+      }
+    }
   </style>
 </head>
 <body>
-  
+
+  <!-- Página de Carregamento -->
   <div class="loading-page" id="loading-page">
-    <h1>PartnerCast</h1>
-    <div class="icons">
-      <i class="fas fa-bolt" title="Energia"></i>
-      <i class="fas fa-book" title="Conhecimento"></i>
-      <i class="fas fa-shield-alt" title="Segurança"></i>
-      <i class="fas fa-tasks" title="Produtividade"></i>
-    </div>
+    <h1>🎧</h1>
+    <h1><i>Partner</i>Cast</h1>
+    <p>Grupo Partnership - Rio Verde/GO</p>
     <div class="progress-bar-container">
       <div class="progress-bar" id="progress-bar"></div>
     </div>
   </div>
 
-  <!-- Conteúdo principal -->
+  <!-- Conteúdo Principal -->
   <div id="main-content" class="hidden">
     <header>
-      <h1>🎧 PartnerCast</h1>
+      <h1>🎧PartnerCast</h1>
       <p>Sua plataforma de conhecimento diário!</p>
-      <button id="refresh-btn">🔄 Atualizar</button>
     </header>
 
-    <main id="podcast-list">Carregando...</main>
+    <main id="podcast-list">
+      <!-- Episódios -->
+      <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0">
+        <img src="img/fundo.jpg" alt="Capa do episódio 1">
+        <h3>Boas-vindas ao PartnerCast</h3>
+        <small>Publicado em 18/07/2025</small>
+      </div>
 
+      <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0">
+        <img src="img/logo_bot_1.png" alt="Capa do episódio 2">
+        <h3>Segredos da produtividade</h3>
+        <small>Publicado em 17/07/2025</small>
+      </div>
+
+      <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0">
+        <img src="img/logo_bot_1.png" alt="Capa do episódio 3">
+        <h3>Teste</h3>
+        <small>Publicado em 15/07/2025</small>
+      </div>
+    </main>
+<br>
+<br><br><br><br><br><br><br>
     <footer>
       <div id="now-playing">Nenhum episódio tocando</div>
       <div id="audio-player-container">
-        <div>
-          <button class="player-btn" id="prev-btn">⏮️</button>
-          <button class="player-btn" id="play-btn">🟢</button>
-          <button class="player-btn" id="next-btn">⏭️</button>
-        </div>
-        <!-- Player de áudio -->
         <audio id="audio-player" controls></audio>
+        <div class="time-display">
+          <span id="current-time">00:00</span> / <span id="total-time">00:00</span>
+        </div>
+        <div class="volume-control" id="volume-control"></div>
       </div>
     </footer>
   </div>
 
   <script>
-    // Variáveis
     const loadingPage = document.getElementById("loading-page");
     const progressBar = document.getElementById("progress-bar");
     const mainContent = document.getElementById("main-content");
     const audioPlayer = document.getElementById("audio-player");
     const nowPlaying = document.getElementById("now-playing");
+    const currentTimeDisplay = document.getElementById("current-time");
+    const totalTimeDisplay = document.getElementById("total-time");
+    const volumeControl = document.getElementById("volume-control");
 
+    // Simula a carga
     let progress = 0;
     const interval = setInterval(() => {
       progress += 1;
@@ -262,59 +312,49 @@
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
-          loadingPage.classList.add("hidden");
-          mainContent.classList.remove("hidden");
-        }, 500); 
+          loadingPage.style.opacity = 0;
+          setTimeout(() => {
+            loadingPage.classList.add("hidden");
+            mainContent.classList.remove("hidden");
+          }, 500); 
+        }, 500);
       }
     }, 40);
 
-    const episodes = [
-      {
-        id: "ep1",
-        title: "Boas-vindas ao PartnerCast",
-        url: "https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
-        date: "2025-07-18"
-      },
-      {
-        id: "ep2",
-        title: "Segredos da produtividade",
-        url: "https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
-        date: "2025-07-17"
-      },
-      {
-        id: "ep3",
-        title: "teste",
-        url: "https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
-        date: "2025-07-15"
-      }
-    ];
-
-    // Função para carregar os episódios
-    function loadEpisodes() {
-      const list = document.getElementById("podcast-list");
-      list.innerHTML = "";
-      episodes.forEach(ep => {
-        const div = document.createElement("div");
-        div.className = "episode";
-        div.innerHTML = `<h3>${ep.title}</h3><small>${new Date(ep.date).toLocaleDateString("pt-BR")}</small>`;
-        div.onclick = () => {
-          nowPlaying.textContent = `▶ Tocando: ${ep.title}`;
-          audioPlayer.src = ep.url;
-          audioPlayer.play();
-        };
-        list.appendChild(div);
-      });
+    // Formato de tempo (minutos:segundos)
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
     }
 
-    loadEpisodes();
-
-    // Atualizar a barra de progresso enquanto o áudio toca
+    // Atualizar tempo do áudio
     audioPlayer.ontimeupdate = function() {
-      const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-      progressBar.style.width = percentage + "%";
+      currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
+      totalTimeDisplay.textContent = formatTime(audioPlayer.duration);
+      progressBar.style.width = (audioPlayer.currentTime / audioPlayer.duration) * 100 + "%";
     };
+
+    // Quando um episódio for clicado
+    const episodes = document.querySelectorAll('.episode');
+    episodes.forEach(episode => {
+      episode.onclick = () => {
+        const audioUrl = episode.getAttribute("data-audio-url");
+        nowPlaying.textContent = `▶ Tocando: ${episode.querySelector('h3').textContent}`;
+        audioPlayer.src = audioUrl;
+        audioPlayer.play();
+      };
+    });
+
+    // Volume Control
+    volumeControl.addEventListener('click', (e) => {
+      const rect = volumeControl.getBoundingClientRect();
+      const clickPos = e.clientX - rect.left;
+      const volume = clickPos / rect.width;
+      audioPlayer.volume = Math.min(Math.max(volume, 0), 1);
+      volumeControl.style.background = `linear-gradient(to right, var(--green) ${volume * 100}%, var(--player-inactive) ${volume * 100}%)`;
+    });
   </script>
 
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
