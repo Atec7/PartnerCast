@@ -79,7 +79,6 @@
       border-radius: 5px;
     }
 
- 
     .hidden {
       display: none;
     }
@@ -223,7 +222,7 @@
     </div>
   </div>
 
-  
+  <!-- Conteúdo principal -->
   <div id="main-content" class="hidden">
     <header>
       <h1>🎧 PartnerCast</h1>
@@ -241,18 +240,20 @@
           <button class="player-btn" id="play-btn">🟢</button>
           <button class="player-btn" id="next-btn">⏭️</button>
         </div>
-        <progress id="audio-player" value="0" max="100"></progress>
+        <!-- Player de áudio -->
+        <audio id="audio-player" controls></audio>
       </div>
     </footer>
   </div>
 
   <script>
-    
+    // Variáveis
     const loadingPage = document.getElementById("loading-page");
     const progressBar = document.getElementById("progress-bar");
     const mainContent = document.getElementById("main-content");
+    const audioPlayer = document.getElementById("audio-player");
+    const nowPlaying = document.getElementById("now-playing");
 
-    
     let progress = 0;
     const interval = setInterval(() => {
       progress += 1;
@@ -267,12 +268,11 @@
       }
     }, 40);
 
-
     const episodes = [
       {
         id: "ep1",
         title: "Boas-vindas ao PartnerCast",
-        url: "https://www.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
+        url: "https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
         date: "2025-07-18"
       },
       {
@@ -284,12 +284,12 @@
       {
         id: "ep3",
         title: "teste",
-        url: "https://dl.dropbox.com/scl/fi/e48nfh5trjyscdcut6op3/AUD-20241028-WA0019.opus?rlkey=22xljvvz4jbfd64277e8heji2&st=j1qft97n&dl=0",
+        url: "https://dl.dropbox.com/scl/fi/gxrznnei9002jv28uuzow/PartnerCast_-Conhecimento-e-Crescimento-em-Parceria.wav?rlkey=8ykc1mrwrpmkx7gyvxll13gs6&st=podev7fo&dl=0",
         date: "2025-07-15"
       }
     ];
 
- 
+    // Função para carregar os episódios
     function loadEpisodes() {
       const list = document.getElementById("podcast-list");
       list.innerHTML = "";
@@ -298,14 +298,21 @@
         div.className = "episode";
         div.innerHTML = `<h3>${ep.title}</h3><small>${new Date(ep.date).toLocaleDateString("pt-BR")}</small>`;
         div.onclick = () => {
-          document.getElementById("now-playing").textContent = `▶ Tocando: ${ep.title}`;
-          document.getElementById("audio-player").src = ep.url;
+          nowPlaying.textContent = `▶ Tocando: ${ep.title}`;
+          audioPlayer.src = ep.url;
+          audioPlayer.play();
         };
         list.appendChild(div);
       });
     }
 
     loadEpisodes();
+
+    // Atualizar a barra de progresso enquanto o áudio toca
+    audioPlayer.ontimeupdate = function() {
+      const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+      progressBar.style.width = percentage + "%";
+    };
   </script>
 
   <script src="https://kit.fontawesome.com/a076d05399.js"></script>
