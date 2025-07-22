@@ -274,6 +274,12 @@
     .hidden {
       display: none;
     }
+    .patrocinador{
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -295,35 +301,44 @@
       <p>Sua plataforma de conhecimento diário!</p>
     </header>
 
-    <main id="podcast-list">
-      <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/aaqvi29etdfnf0zxc7kxs/TESTE01.mp4?rlkey=5rpymtoplofd06hy24hvnl612&st=cxwkr5ad&dl=0">
-        <img src="img/fundo.jpg" alt="Capa do episódio 1">
-        <h3>Boas Vindas ao Nosso PartnerCast</h3>
-        <small>Publicado em 15/07/2025</small>
-        <button class="share-btn" onclick="shareEpisode()">Compartilhar</button>
-      </div>
+   <main id="podcast-list">
+  <div class="episode">
+    <video controls width="400px%" height="260px" poster="img/fundo.jpg">
+      <source src="https://dl.dropbox.com/scl/fi/aaqvi29etdfnf0zxc7kxs/TESTE01.mp4?rlkey=5rpymtoplofd06hy24hvnl612&st=cxwkr5ad&dl=0" type="video/mp4">
+      Seu navegador não suporta a reprodução de vídeo.
+    </video>
+    <h3>Boas Vindas ao Nosso PartnerCast</h3>
+    <small>Publicado em 15/07/2025</small>
+    <button class="share-btn" onclick="shareEpisode()">Compartilhar</button>
+  </div>
+</main>
 
+<!--
       <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/p5ew2p6cdfrq0akjv9wd5/ATUAR_-Guia-Essencial-de-An-lise-de-Risco-e-Seguran-a-1-.mp3.mp3?rlkey=v1rqi1l10td40f142k8ztzqky&st=qqfxdwfu&dl=0">
-        <img src="img/EP-02.png" alt="Capa do episódio 2">
+        <img src="img/logo.jpg" alt="Capa do episódio 2">
         <h3>Hoje é sobre o A.T.U.A.R! 👷🏼‍♂️👷🏽‍♀️</h3>
         <small>Publicado em 17/07/2025</small>
         <button class="share-btn" onclick="shareEpisode()">Compartilhar</button>
       </div>
-
+-->
 
       <br><br><br><br><br>
     </main>
 <br><br><br><br><br>
+<!--
     <footer>
       <div id="now-playing">▶ Tocando: </div>
       <div id="audio-player-container">
         <audio id="audio-player" controls></audio>
-        <!-- <div class="time-display">00:00</div> -->
+        <!-- <div class="time-display">00:00</div> 
         <div class="volume-control" id="volume-control"></div>
       </div>
     </footer>
   </div>
-
+-->
+  <footer class="patrocinador">
+    <img src="logo.bot.png" class="patrocinador">
+  </footer>
   <script>
     const loadingPage = document.getElementById("loading-page");
     const progressBar = document.getElementById("progress-bar");
@@ -363,7 +378,7 @@
   
     function shareEpisode() {
       const pageUrl = window.location.href;
-      const message = `*🎧 Confira este episódio do PartnerCast de Hoje!* 🚀\n\nEscute sobre Segurança, Boas práticas, Crescimento pessoal e Profissionais dentre vários outros assuntos... \n\nAcesse agora: ${pageUrl}`;
+      const message = `*🎧 Confira este episódio do PartnerCast!* 🚀\n\nEscute sobre Segurança, Boas práticas, Crescimento pessoal e Profissionals dentre vários outros assuntos \n\nAcesse agora: ${pageUrl}`;
       const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
       window.open(whatsappUrl, '_blank');
     }
