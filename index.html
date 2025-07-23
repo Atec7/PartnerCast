@@ -5,34 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PartnerCast</title>
   <style>
-    /* Estilos gerais (os mesmos de antes) */
+    /* Estilos gerais */
     :root {
-      --bg: #0d0d0d;
+      --bg: #121212;
       --green: #00ff88;
-      --dark: #111;
-      --lighter: #1a1a1a;
+      --dark: #1a1a1a;
+      --lighter: #333333;
       --highlight: #2bbf7d;
-      --player-bg: #222;
-      --player-inactive: #555;
-      --light-bg: #f4f4f4;
-      --light-green: #00c858;
-      --light-text: #333;
+      --white: #f4f4f4;
     }
-
-    h1 {
+    h1{
       color: #00ff88;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg);
-      color: var(--green);
+      color: var(--white);
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -40,57 +28,54 @@
     }
 
     header {
-      background-size: cover;
       padding: 2em;
       text-align: center;
-      color: #fff;
-      border-bottom: 2px solid var(--green);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      color: var(--white);
     }
 
-    header h1 {
-      font-size: 2.5em;
-      margin-bottom: 0.5em;
-    }
-
-    header p {
-      font-size: 1.3em;
+    .episode-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      padding: 20px;
+      gap: 20px;
     }
 
     .episode {
       background: var(--lighter);
       margin-bottom: 20px;
-      border-left: 5px solid var(--green);
       border-radius: 12px;
-      padding: 16px;
+      width: 300px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      padding: 15px;
       cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      transition: transform 0.3s, background 0.3s;
-      width: 100%;
+      transition: transform 0.2s ease-in-out;
     }
 
     .episode:hover {
-      background: #222;
       transform: translateY(-5px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     }
 
     .episode img {
       width: 100%;
-      max-width: 300px;
-      height: auto;
+      height: 180px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 15px;
     }
 
     .episode h3 {
-      font-size: 1.2em;
+      font-size: 1.4em;
       color: var(--green);
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       text-align: center;
+    }
+
+    .episode p {
+      color: #ddd;
+      font-size: 0.95em;
+      text-align: center;
+      margin-bottom: 15px;
     }
 
     .episode small {
@@ -98,296 +83,222 @@
       color: #aaa;
     }
 
-    .episode .share-btn {
-      background: var(--highlight);
-      color: white;
+    .like-btn, .comment-btn, .toggle-comments-btn {
+      background-color: var(--highlight);
+      color: var(--white);
       border: none;
-      padding: 5px 10px;
+      padding: 8px 15px;
       margin-top: 10px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.9em;
+      font-size: 1em;
       transition: background-color 0.3s;
     }
 
-    .episode .share-btn:hover {
+    .like-btn:hover, .comment-btn:hover, .toggle-comments-btn:hover {
       background: #009e60;
     }
 
-    footer {
-      background: var(--player-bg);
-      padding: 1em;
-      border-top: 2px solid var(--green);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    .comments {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: var(--dark);
+      border-radius: 8px;
       width: 100%;
+      display: none;
     }
 
-    #now-playing {
-      font-size: 1em;
-      color: var(--green);
-      font-weight: bold;
-      margin-bottom: 5px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    #audio-player-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      height: auto;
-    }
-
-    #audio-player {
-      width: 100%;
+    .comment {
       background-color: #222;
-      border-radius: 10px;
-      border: 2px solid #00ff88;
-      padding: 5px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .time-display {
-      font-size: 1em;
-      color: var(--green);
-      margin-top: 10px;
-    }
-
-    .player-btn {
-      background-color: transparent;
-      border: none;
-      color: var(--green);
-      font-size: 1.5em;
-      cursor: pointer;
-      margin: 0 10px;
-    }
-
-    .player-btn:hover {
-      color: var(--highlight);
-    }
-
-    .volume-control {
-      width: 100%;
-      height: 5px;
-      background-color: var(--player-inactive);
+      padding: 8px;
+      margin-bottom: 10px;
       border-radius: 5px;
-      margin-top: 10px;
-      cursor: pointer;
     }
 
-    @media (max-width: 1024px) {
-      header h1 {
-        font-size: 2em;
-      }
-
-      .episode {
-        width: calc(50% - 10px);
-      }
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 1.8em;
-      }
-
-      .episode img {
-        width: 100%;
-        max-width: 150px;
-      }
-
-      footer {
-        padding: 0.8em;
-      }
-
-      .episode {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      header h1 {
-        font-size: 1.5em;
-      }
-
-      .episode img {
-        width: 100%;
-        max-width: 120px;
-      }
-
-      footer {
-        padding: 0.5em;
-      }
-
-      .episode {
-        width: 100%;
-      }
-
-      #audio-player {
-        width: 100%;
-      }
-
-      .time-display {
-        font-size: 0.9em;
-      }
-    }
-
-    /* Estilo da página de loading */
-    .loading-page {
+    /* Estilos do modal de vídeo */
+    .video-modal {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--bg);
-      color: white;
-      display: flex;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
       justify-content: center;
       align-items: center;
-      flex-direction: column;
-      z-index: 9999;
+      z-index: 1000;
     }
 
-    .progress-bar-container {
+    .video-modal iframe {
       width: 80%;
-      height: 5px;
-      background-color: #444;
+      height: 80%;
+      border: none;
+    }
+
+    .video-modal button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #00ff88;
+      color: black;
+      border: none;
+      padding: 10px;
       border-radius: 5px;
-      margin-top: 20px;
-    }
-
-    .progress-bar {
-      height: 100%;
-      width: 0%;
-      background-color: var(--green);
-      border-radius: 5px;
-    }
-
-    .hidden {
-      display: none;
-    }
-    .patrocinador{
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      text-align: center;
-    }
-
-    .classe-temporaria {
-      text-align: center;
+      cursor: pointer;
+      font-size: 1.5em;
     }
   </style>
 </head>
 <body>
 
-  
-  <div class="loading-page" id="loading-page">
-    <h1>🎧</h1>
-    <h1><i>Partner</i>Cast</h1>
+  <header>
+    <h1>🎧<i>Partner</i>Cast</h1>
     <p>Grupo Partnership - Rio Verde/GO</p>
-    <div class="progress-bar-container">
-      <div class="progress-bar" id="progress-bar"></div>
-    </div>
+  </header>
+
+  <main id="podcast-list" class="episode-list">
+    <!-- Episódios serão carregados aqui -->
+  </main>
+
+  <div class="video-modal" id="video-modal">
+    <button id="close-video-btn">Fechar</button>
+    <iframe id="video-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+    import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-  <div id="main-content" class="hidden">
-    <header>
-      <h1>🎧PartnerCast</h1>
-      <p>Sua plataforma de conhecimento diário!</p>
-    </header>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBHKGShwjQrny-srWvxXZD9JOnc_K2xFU",
+      authDomain: "curtidas-e-coment.firebaseapp.com",
+      databaseURL: "https://curtidas-e-coment-default-rtdb.firebaseio.com/",
+      projectId: "curtidas-e-coment",
+      storageBucket: "curtidas-e-coment.appspot.com",
+      messagingSenderId: "660807825414",
+      appId: "1:660807825414:web:006d7e7d225032d02a2b87",
+      measurementId: "G-1PQBHYB74H"
+    };
 
-    <h1 class="classe-temporaria"><b> <br>😌🤏🏻🎙️</b>Em breve!</h1>
-   <main id="podcast-list">
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
 
-<!--
-  <div class="episode">
-    <video controls width="400px%" height="260px" poster="img/fundo.jpg">
-      <source src="https://dl.dropbox.com/scl/fi/aaqvi29etdfnf0zxc7kxs/TESTE01.mp4?rlkey=5rpymtoplofd06hy24hvnl612&st=cxwkr5ad&dl=0" type="video/mp4">
-      Seu navegador não suporta a reprodução de vídeo.
-    </video>
-    <h3>Boas Vindas ao Nosso PartnerCast</h3>
-    <small>Publicado em 15/07/2025</small>
-    <button class="share-btn" onclick="shareEpisode()">Compartilhar</button>
-  </div>
-</main>
--->
-     
-<!--
-      <div class="episode" data-audio-url="https://dl.dropbox.com/scl/fi/p5ew2p6cdfrq0akjv9wd5/ATUAR_-Guia-Essencial-de-An-lise-de-Risco-e-Seguran-a-1-.mp3.mp3?rlkey=v1rqi1l10td40f142k8ztzqky&st=qqfxdwfu&dl=0">
-        <img src="img/logo.jpg" alt="Capa do episódio 2">
-        <h3>Hoje é sobre o A.T.U.A.R! 👷🏼‍♂️👷🏽‍♀️</h3>
-        <small>Publicado em 17/07/2025</small>
-        <button class="share-btn" onclick="shareEpisode()">Compartilhar</button>
-      </div>
--->
+    function loadEpisodes() {
+      const episodesRef = ref(database, 'episodes');
+      get(episodesRef).then((snapshot) => {
+        if (snapshot.exists()) {
+          const episodes = snapshot.val();
+          const podcastList = document.getElementById('podcast-list');
+          
+          for (let episodeId in episodes) {
+            const episode = episodes[episodeId];
 
-      <br><br><br><br><br>
-    </main>
-<br><br><br><br><br>
-<!--
-    <footer>
-      <div id="now-playing">▶ Tocando: </div>
-      <div id="audio-player-container">
-        <audio id="audio-player" controls></audio>
-        <!-- <div class="time-display">00:00</div> 
-        <div class="volume-control" id="volume-control"></div>
-      </div>
-    </footer>
-  </div>
--->
+            const episodeDiv = document.createElement('div');
+            episodeDiv.classList.add('episode');
 
-  <script>
-    const loadingPage = document.getElementById("loading-page");
-    const progressBar = document.getElementById("progress-bar");
-    const mainContent = document.getElementById("main-content");
-    const audioPlayer = document.getElementById("audio-player");
-    const nowPlaying = document.getElementById("now-playing");
+            const episodeContent = `
+              <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
+              <h3>${episode.title}</h3>
+              <p>${episode.description}</p>
+              <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small>
+              <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
+              <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
+              <button class="toggle-comments-btn" data-episode-id="${episodeId}">Mostrar Comentários</button>
+              <div class="comments" id="comments-${episodeId}"></div>
+            `;
 
- 
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += 1;
-      progressBar.style.width = progress + "%";
+            episodeDiv.innerHTML = episodeContent;
+            podcastList.appendChild(episodeDiv);
 
-      if (progress >= 100) {
-        clearInterval(interval);
-        setTimeout(() => {
-          loadingPage.style.opacity = 0;
-          setTimeout(() => {
-            loadingPage.classList.add("hidden");
-            mainContent.classList.remove("hidden");
-          }, 500);
-        }, 500);
-      }
-    }, 40);
+            // Evento para abrir o vídeo no modal
+            episodeDiv.querySelector('.episode-img').addEventListener('click', function() {
+              const modal = document.getElementById('video-modal');
+              const iframe = document.getElementById('video-player');
+              iframe.src = episode.videoLink;
+              modal.style.display = 'flex';
+            });
 
-   
-    const episodes = document.querySelectorAll('.episode');
-    episodes.forEach(episode => {
-      episode.onclick = () => {
-        const audioUrl = episode.getAttribute("data-audio-url");
-        nowPlaying.textContent = `▶ Tocando: ${episode.querySelector('h3').textContent}`;
-        audioPlayer.src = audioUrl;
-        audioPlayer.play();
-      };
-    });
+            // Fechar o modal de vídeo
+            document.getElementById('close-video-btn').addEventListener('click', function() {
+              const modal = document.getElementById('video-modal');
+              const iframe = document.getElementById('video-player');
+              iframe.src = '';  // Limpar o iframe
+              modal.style.display = 'none';  // Fechar o modal
+            });
 
-  
-    function shareEpisode() {
-      const pageUrl = window.location.href;
-      const message = `*🎧 Confira este episódio do PartnerCast!* 🚀\n\nEscute sobre Segurança, Boas práticas, Crescimento pessoal e Profissionals dentre vários outros assuntos \n\nAcesse agora: ${pageUrl}`;
-      const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
+            // Funções de curtir, comentar e mostrar/ocultar comentários
+            episodeDiv.querySelector('.like-btn').addEventListener('click', function() {
+              const episodeId = this.getAttribute('data-episode-id');
+              addLike(episodeId);
+            });
+
+            episodeDiv.querySelector('.comment-btn').addEventListener('click', function() {
+              const episodeId = this.getAttribute('data-episode-id');
+              const commentText = prompt('Escreva seu comentário:');
+              if (commentText) {
+                addComment(episodeId, commentText);
+                loadComments(episodeId);
+              }
+            });
+
+            episodeDiv.querySelector('.toggle-comments-btn').addEventListener('click', function() {
+              const episodeId = this.getAttribute('data-episode-id');
+              toggleComments(episodeId);
+            });
+
+            loadComments(episodeId);
+          }
+        }
+      });
     }
+
+    function addLike(episodeId) {
+      const episodeRef = ref(database, 'episodes/' + episodeId + '/likes');
+      get(episodeRef).then((snapshot) => {
+        let currentLikes = snapshot.exists() ? snapshot.val() : 0;
+        currentLikes += 1;
+        set(episodeRef, currentLikes).then(() => {
+          document.getElementById(`likes-${episodeId}`).textContent = currentLikes;
+        });
+      });
+    }
+
+    function addComment(episodeId, commentText) {
+      const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+      const newCommentRef = push(commentsRef);
+      set(newCommentRef, {
+        text: commentText
+      });
+    }
+
+    function loadComments(episodeId) {
+      const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+      get(commentsRef).then((snapshot) => {
+        const commentsDiv = document.getElementById('comments-' + episodeId);
+        commentsDiv.innerHTML = '';  // Limpar os comentários antigos
+        if (snapshot.exists()) {
+          const comments = snapshot.val();
+          for (let commentId in comments) {
+            const comment = comments[commentId];
+            const commentElement = document.createElement('div');
+            commentElement.classList.add('comment');
+            commentElement.textContent = comment.text;
+            commentsDiv.appendChild(commentElement);
+          }
+        } else {
+          commentsDiv.innerHTML = 'Nenhum comentário ainda. Seja o primeiro a comentar!';
+        }
+      });
+    }
+
+    function toggleComments(episodeId) {
+      const commentsDiv = document.getElementById('comments-' + episodeId);
+      commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Carregar os episódios ao carregar a página
+    loadEpisodes();
   </script>
+
 </body>
 </html>
