@@ -3,8 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>PartnerCast</title>
   <style>
+
+  .whatsapp-btn {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.whatsapp-btn:hover {
+  background-color: #1ebc57;
+}
+
     /* Estilos gerais */
     :root {
       --bg: #121212;
@@ -27,31 +49,81 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
+    /* Tela de carregamento */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg);
+      color: var(--white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+
+    .progress-bar {
+      width: 300px;
+      height: 10px;
+      background-color: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .progress {
+      height: 100%;
+      width: 0%;
+      background-color: var(--green);
+      animation: progressAnimation 3s linear forwards;
+    }
+
+    @keyframes progressAnimation {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+
     header {
       padding: 2em;
       text-align: center;
       color: var(--white);
+      
     }
 
-    .episode-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      padding: 20px;
-      gap: 20px;
-    }
+ .episode-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* centraliza em telas pequenas */
+  gap: 15px;
+  padding: 20px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-    .episode {
-      background: var(--lighter);
-      margin-bottom: 20px;
-      border-radius: 12px;
-      width: 400px;
-      height: 400px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      padding: 25px;
-      cursor: pointer;
-      transition: transform 0.2s ease-in-out;
-    }
+@media (min-width: 1200px) {
+  .episode-list {
+    justify-content: flex-start; /* alinhamento à esquerda em telas grandes */
+    padding: 20px 40px;
+  }
+}
+
+
+.episode {
+  background: var(--lighter);
+  margin-bottom: 12px; /* diminui de 20px para 12px */
+  border-radius: 12px;
+  width: 400px;
+  height: 400px;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  padding: 25px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
 
     .episode:hover {
       transform: translateY(-5px);
@@ -101,25 +173,37 @@
     }
 
     .comments {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: var(--dark);
-      border-radius: 8px;
-      width: 100%;
-      display: none;
-      text-align: center;
-    }
+  margin-top: 15px;
+  padding: 15px;
+  background-color: var(--dark);
+  border-radius: 12px;
+  width: 100%;
+  display: none;
+  text-align: left; /* comentários geralmente ficam alinhados à esquerda */
+  max-height: 200px; /* limite de altura com scroll */
+  overflow-y: auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  font-size: 0.95em;
+  color: #ccc;
+  line-height: 1.4;
+}
 
-    .comment {
-      background-color: #222;
-      padding: 8px;
-      margin-bottom: 0px;
-      border-radius: 5px;
-      text-align: center;
-      position: auto;
-    }
+.comment {
+  background-color: #2a2a2a;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.6);
+  word-wrap: break-word;
+  transition: background-color 0.3s ease;
+}
 
-    /* Estilos do modal de vídeo */
+.comment:hover {
+  background-color: #3d3d3d;
+}
+
+
     .video-modal {
       display: none;
       position: fixed;
@@ -151,9 +235,22 @@
       cursor: pointer;
       font-size: 1.5em;
     }
+    .logo{
+      border-radius: 50%;
+      width: 400px;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Tela de carregamento -->
+  <div id="loading-screen">
+    <img class="logo" src="img/logo-partnercast.jpg" alt="">
+        <h2>Seja Bem-Vindo!</h2>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+  </div>
 
   <header>
     <h1>🎧<i>Partner</i>Cast</h1>
@@ -169,140 +266,157 @@
     <iframe id="video-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBHKGShwjQrny-srWvxXZD9JOnc_K2xFU",
-      authDomain: "curtidas-e-coment.firebaseapp.com",
-      databaseURL: "https://curtidas-e-coment-default-rtdb.firebaseio.com/",
-      projectId: "curtidas-e-coment",
-      storageBucket: "curtidas-e-coment.appspot.com",
-      messagingSenderId: "660807825414",
-      appId: "1:660807825414:web:006d7e7d225032d02a2b87",
-      measurementId: "G-1PQBHYB74H"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const database = getDatabase(app);
-
-    function loadEpisodes() {
-      const episodesRef = ref(database, 'episodes');
-      get(episodesRef).then((snapshot) => {
-        if (snapshot.exists()) {
-          const episodes = snapshot.val();
-          const podcastList = document.getElementById('podcast-list');
-          
-          for (let episodeId in episodes) {
-            const episode = episodes[episodeId];
-
-            const episodeDiv = document.createElement('div');
-            episodeDiv.classList.add('episode');
-
-            const episodeContent = `
-              <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
-              <h3>${episode.title}</h3>
-              <p>${episode.description}</p>
-              <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
-              <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
-              <button class="comment-btn" data-episode-id="${episodeId}">Comente</button>
-              <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
-              <div class="comments" id="comments-${episodeId}"></div>
-            `;
-
-            episodeDiv.innerHTML = episodeContent;
-            podcastList.appendChild(episodeDiv);
-
-            // Evento para abrir o vídeo no modal
-            episodeDiv.querySelector('.episode-img').addEventListener('click', function() {
-              const modal = document.getElementById('video-modal');
-              const iframe = document.getElementById('video-player');
-              iframe.src = episode.videoLink;
-              modal.style.display = 'flex';
-            });
-
-            // Fechar o modal de vídeo
-            document.getElementById('close-video-btn').addEventListener('click', function() {
-              const modal = document.getElementById('video-modal');
-              const iframe = document.getElementById('video-player');
-              iframe.src = '';  // Limpar o iframe
-              modal.style.display = 'none';  // Fechar o modal
-            });
-
-            // Funções de curtir, comentar e mostrar/ocultar comentários
-            episodeDiv.querySelector('.like-btn').addEventListener('click', function() {
-              const episodeId = this.getAttribute('data-episode-id');
-              addLike(episodeId);
-            });
-
-            episodeDiv.querySelector('.comment-btn').addEventListener('click', function() {
-              const episodeId = this.getAttribute('data-episode-id');
-              const commentText = prompt('Escreva seu comentário:');
-              if (commentText) {
-                addComment(episodeId, commentText);
-                loadComments(episodeId);
-              }
-            });
-
-            episodeDiv.querySelector('.toggle-comments-btn').addEventListener('click', function() {
-              const episodeId = this.getAttribute('data-episode-id');
-              toggleComments(episodeId);
-            });
-
-            loadComments(episodeId);
-          }
-        }
-      });
-    }
-
-    function addLike(episodeId) {
-      const episodeRef = ref(database, 'episodes/' + episodeId + '/likes');
-      get(episodeRef).then((snapshot) => {
-        let currentLikes = snapshot.exists() ? snapshot.val() : 0;
-        currentLikes += 1;
-        set(episodeRef, currentLikes).then(() => {
-          document.getElementById(`likes-${episodeId}`).textContent = currentLikes;
-        });
-      });
-    }
-
-    function addComment(episodeId, commentText) {
-      const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
-      const newCommentRef = push(commentsRef);
-      set(newCommentRef, {
-        text: commentText
-      });
-    }
-
-    function loadComments(episodeId) {
-      const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
-      get(commentsRef).then((snapshot) => {
-        const commentsDiv = document.getElementById('comments-' + episodeId);
-        commentsDiv.innerHTML = '';  // Limpar os comentários antigos
-        if (snapshot.exists()) {
-          const comments = snapshot.val();
-          for (let commentId in comments) {
-            const comment = comments[commentId];
-            const commentElement = document.createElement('div');
-            commentElement.classList.add('comment');
-            commentElement.textContent = comment.text;
-            commentsDiv.appendChild(commentElement);
-          }
-        } else {
-          commentsDiv.innerHTML = 'Nenhum comentário ainda. Seja o primeiro a comentar!';
-        }
-      });
-    }
-
-    function toggleComments(episodeId) {
-      const commentsDiv = document.getElementById('comments-' + episodeId);
-      commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // Carregar os episódios ao carregar a página
-    loadEpisodes();
+  <script>
+    // Esconder tela de carregamento após 3 segundos
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loading-screen").style.display = "none";
+      }, 3000);
+    });
   </script>
 
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBHKGShwjQrny-srWvxXZD9JOnc_K2xFU",
+  authDomain: "curtidas-e-coment.firebaseapp.com",
+  databaseURL: "https://curtidas-e-coment-default-rtdb.firebaseio.com/",
+  projectId: "curtidas-e-coment",
+  storageBucket: "curtidas-e-coment.appspot.com",
+  messagingSenderId: "660807825414",
+  appId: "1:660807825414:web:006d7e7d225032d02a2b87",
+  measurementId: "G-1PQBHYB74H"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+function loadEpisodes() {
+  const episodesRef = ref(database, 'episodes');
+  get(episodesRef).then((snapshot) => {
+    if (snapshot.exists()) {
+      const episodes = snapshot.val();
+      const podcastList = document.getElementById('podcast-list');
+      
+      for (let episodeId in episodes) {
+        const episode = episodes[episodeId];
+
+        const episodeDiv = document.createElement('div');
+        episodeDiv.classList.add('episode');
+
+        const episodeContent = `
+          <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
+          <h3>${episode.title}</h3>
+          <p>${episode.description}</p>
+          <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
+          <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
+          <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
+          <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
+          <button class="whatsapp-btn" data-episode-id="${episodeId}" title="Compartilhar no WhatsApp">
+            <i class="fab fa-whatsapp"></i>
+          </button>
+          <div class="comments" id="comments-${episodeId}"></div>
+        `;
+
+        episodeDiv.innerHTML = episodeContent;
+        podcastList.appendChild(episodeDiv);
+
+        episodeDiv.querySelector('.episode-img').addEventListener('click', function() {
+          const modal = document.getElementById('video-modal');
+          const iframe = document.getElementById('video-player');
+          iframe.src = episode.videoLink;
+          modal.style.display = 'flex';
+        });
+
+        document.getElementById('close-video-btn').addEventListener('click', function() {
+          const modal = document.getElementById('video-modal');
+          const iframe = document.getElementById('video-player');
+          iframe.src = '';
+          modal.style.display = 'none';
+        });
+
+        episodeDiv.querySelector('.like-btn').addEventListener('click', function() {
+          const episodeId = this.getAttribute('data-episode-id');
+          addLike(episodeId);
+        });
+
+        episodeDiv.querySelector('.comment-btn').addEventListener('click', function() {
+          const episodeId = this.getAttribute('data-episode-id');
+          const commentText = prompt('Escreva seu comentário:');
+          if (commentText) {
+            addComment(episodeId, commentText);
+            loadComments(episodeId);
+          }
+        });
+
+        episodeDiv.querySelector('.toggle-comments-btn').addEventListener('click', function() {
+          const episodeId = this.getAttribute('data-episode-id');
+          toggleComments(episodeId);
+        });
+
+        // *** Adiciona o evento de clique no botão WhatsApp aqui ***
+        episodeDiv.querySelector('.whatsapp-btn').addEventListener('click', function() {
+          const episodeId = this.getAttribute('data-episode-id');
+          const ep = episodes[episodeId];  // pega dados do episódio para montar a mensagem
+          const message = `🎧 *Confira esse episódio incrível do PartnerCast!*\n\n📌 *${ep.title}*\n\n👉 Acesse agora: https://atec7.github.io/PartnerCast/`;
+          const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+          window.open(url, '_blank');
+        });
+
+        loadComments(episodeId);
+      }
+    }
+  });
+}
+
+function addLike(episodeId) {
+  const episodeRef = ref(database, 'episodes/' + episodeId + '/likes');
+  get(episodeRef).then((snapshot) => {
+    let currentLikes = snapshot.exists() ? snapshot.val() : 0;
+    currentLikes += 1;
+    set(episodeRef, currentLikes).then(() => {
+      document.getElementById(`likes-${episodeId}`).textContent = currentLikes;
+    });
+  });
+}
+
+function addComment(episodeId, commentText) {
+  const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+  const newCommentRef = push(commentsRef);
+  set(newCommentRef, {
+    text: commentText
+  });
+}
+
+function loadComments(episodeId) {
+  const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+  get(commentsRef).then((snapshot) => {
+    const commentsDiv = document.getElementById('comments-' + episodeId);
+    commentsDiv.innerHTML = '';
+    if (snapshot.exists()) {
+      const comments = snapshot.val();
+      for (let commentId in comments) {
+        const comment = comments[commentId];
+        const commentElement = document.createElement('div');
+        commentElement.classList.add('comment');
+        commentElement.textContent = comment.text;
+        commentsDiv.appendChild(commentElement);
+      }
+    } else {
+      commentsDiv.innerHTML = 'Nenhum comentário ainda. Seja o primeiro a comentar!';
+    }
+  });
+}
+
+function toggleComments(episodeId) {
+  const commentsDiv = document.getElementById('comments-' + episodeId);
+  commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+}
+
+loadEpisodes();
+
+  </script>
 </body>
 </html>
