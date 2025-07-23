@@ -45,9 +45,10 @@
       background: var(--lighter);
       margin-bottom: 20px;
       border-radius: 12px;
-      width: 300px;
+      width: 400px;
+      height: 400px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      padding: 15px;
+      padding: 25px;
       cursor: pointer;
       transition: transform 0.2s ease-in-out;
     }
@@ -58,7 +59,7 @@
 
     .episode img {
       width: 100%;
-      height: 180px;
+      height: 230px;
       object-fit: cover;
       border-radius: 8px;
       margin-bottom: 15px;
@@ -106,13 +107,16 @@
       border-radius: 8px;
       width: 100%;
       display: none;
+      text-align: center;
     }
 
     .comment {
       background-color: #222;
       padding: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 0px;
       border-radius: 5px;
+      text-align: center;
+      position: auto;
     }
 
     /* Estilos do modal de vídeo */
@@ -200,10 +204,10 @@
               <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
               <h3>${episode.title}</h3>
               <p>${episode.description}</p>
-              <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small>
+              <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
               <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
-              <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
-              <button class="toggle-comments-btn" data-episode-id="${episodeId}">Mostrar Comentários</button>
+              <button class="comment-btn" data-episode-id="${episodeId}">Comente</button>
+              <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
               <div class="comments" id="comments-${episodeId}"></div>
             `;
 
