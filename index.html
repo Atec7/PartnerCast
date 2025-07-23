@@ -27,7 +27,7 @@
   background-color: #1ebc57;
 }
 
-    /* Estilos gerais */
+
     :root {
       --bg: #121212;
       --green: #00ff88;
@@ -49,7 +49,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Tela de carregamento */
+ 
     #loading-screen {
       position: fixed;
       top: 0;
@@ -97,7 +97,7 @@
  .episode-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* centraliza em telas pequenas */
+  justify-content: center; 
   gap: 15px;
   padding: 20px 20px;
   max-width: 1200px;
@@ -106,7 +106,7 @@
 
 @media (min-width: 1200px) {
   .episode-list {
-    justify-content: flex-start; /* alinhamento à esquerda em telas grandes */
+    justify-content: flex-start; 
     padding: 20px 40px;
   }
 }
@@ -114,7 +114,7 @@
 
 .episode {
   background: var(--lighter);
-  margin-bottom: 12px; /* diminui de 20px para 12px */
+  margin-bottom: 12px; 
   border-radius: 12px;
   width: 400px;
   height: 400px;
@@ -179,8 +179,8 @@
   border-radius: 12px;
   width: 100%;
   display: none;
-  text-align: left; /* comentários geralmente ficam alinhados à esquerda */
-  max-height: 200px; /* limite de altura com scroll */
+  text-align: left; 
+  max-height: 200px; 
   overflow-y: auto;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   font-size: 0.95em;
@@ -243,7 +243,7 @@
 </head>
 <body>
 
-  <!-- Tela de carregamento -->
+
   <div id="loading-screen">
     <img class="logo" src="img/logo-partnercast.jpg" alt="">
         <h2>Seja Bem-Vindo!</h2>
@@ -258,7 +258,7 @@
   </header>
 
   <main id="podcast-list" class="episode-list">
-    <!-- Episódios serão carregados aqui -->
+
   </main>
 
   <div class="video-modal" id="video-modal">
@@ -267,7 +267,7 @@
   </div>
 
   <script>
-    // Esconder tela de carregamento após 3 segundos
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         document.getElementById("loading-screen").style.display = "none";
@@ -310,7 +310,7 @@ function loadEpisodes() {
           <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
           <h3>${episode.title}</h3>
           <p>${episode.description}</p>
-          <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
+          <small>Curtidas: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
           <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
           <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
           <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
@@ -356,10 +356,10 @@ function loadEpisodes() {
           toggleComments(episodeId);
         });
 
-        // *** Adiciona o evento de clique no botão WhatsApp aqui ***
+
         episodeDiv.querySelector('.whatsapp-btn').addEventListener('click', function() {
           const episodeId = this.getAttribute('data-episode-id');
-          const ep = episodes[episodeId];  // pega dados do episódio para montar a mensagem
+          const ep = episodes[episodeId]; 
           const message = `🎧 *Confira esse episódio incrível do PartnerCast!*\n\n📌 *${ep.title}*\n\n👉 Acesse agora: https://atec7.github.io/PartnerCast/`;
           const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
           window.open(url, '_blank');
