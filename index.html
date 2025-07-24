@@ -49,7 +49,7 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
- 
+   
     #loading-screen {
       position: fixed;
       top: 0;
@@ -97,7 +97,7 @@
  .episode-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; 
+  justify-content: center;
   gap: 15px;
   padding: 20px 20px;
   max-width: 1200px;
@@ -179,7 +179,7 @@
   border-radius: 12px;
   width: 100%;
   display: none;
-  text-align: left; 
+  text-align: left;
   max-height: 200px; 
   overflow-y: auto;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
@@ -274,149 +274,166 @@
       }, 3000);
     });
   </script>
-
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+  import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBBHKGShwjQrny-srWvxXZD9JOnc_K2xFU",
-  authDomain: "curtidas-e-coment.firebaseapp.com",
-  databaseURL: "https://curtidas-e-coment-default-rtdb.firebaseio.com/",
-  projectId: "curtidas-e-coment",
-  storageBucket: "curtidas-e-coment.appspot.com",
-  messagingSenderId: "660807825414",
-  appId: "1:660807825414:web:006d7e7d225032d02a2b87",
-  measurementId: "G-1PQBHYB74H"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyBBHKGShwjQrny-srWvxXZD9JOnc_K2xFU",
+    authDomain: "curtidas-e-coment.firebaseapp.com",
+    databaseURL: "https://curtidas-e-coment-default-rtdb.firebaseio.com/",
+    projectId: "curtidas-e-coment",
+    storageBucket: "curtidas-e-coment.appspot.com",
+    messagingSenderId: "660807825414",
+    appId: "1:660807825414:web:006d7e7d225032d02a2b87",
+    measurementId: "G-1PQBHYB74H"
+  };
 
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
 
-function loadEpisodes() {
+  function getUserName() {
+    let userName = localStorage.getItem('userName');
+    if (!userName) {
+      userName = prompt('🤔Qual seu nome?');
+      if (userName) {
+        localStorage.setItem('userName', userName);
+      } else {
+        userName = 'Anônimo';
+      }
+    }
+    return userName;
+  }
+
+  function loadEpisodes() {
   const episodesRef = ref(database, 'episodes');
   get(episodesRef).then((snapshot) => {
     if (snapshot.exists()) {
       const episodes = snapshot.val();
       const podcastList = document.getElementById('podcast-list');
-      
-      for (let episodeId in episodes) {
-        const episode = episodes[episodeId];
 
+      // Limpa a lista antes de adicionar novos episódios
+      podcastList.innerHTML = '';
+
+      // Converte em array e inverte a ordem para mostrar os mais recentes primeiro
+      const reversedEpisodes = Object.entries(episodes).reverse();
+
+      for (let [episodeId, episode] of reversedEpisodes) {
         const episodeDiv = document.createElement('div');
         episodeDiv.classList.add('episode');
 
-        const episodeContent = `
-          <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
-          <h3>${episode.title}</h3>
-          <p>${episode.description}</p>
-          <small>Curtidas: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
-          <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
-          <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
-          <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
-          <button class="whatsapp-btn" data-episode-id="${episodeId}" title="Compartilhar no WhatsApp">
-            <i class="fab fa-whatsapp"></i>
-          </button>
-          <div class="comments" id="comments-${episodeId}"></div>
-        `;
 
-        episodeDiv.innerHTML = episodeContent;
-        podcastList.appendChild(episodeDiv);
+          const episodeContent = `
+            <img src="${episode.imageLink}" alt="Capa do episódio" class="episode-img" data-episode-id="${episodeId}">
+            <h3>${episode.title}</h3>
+            <p>${episode.description}</p>
+            <small>Likes: <span id="likes-${episodeId}">${episode.likes || 0}</span></small><br>
+            <button class="like-btn" data-episode-id="${episodeId}">❤ Curtir</button>
+            <button class="comment-btn" data-episode-id="${episodeId}">Comentar</button>
+            <button class="toggle-comments-btn" data-episode-id="${episodeId}">Comentários</button>
+            <button class="whatsapp-btn" data-episode-id="${episodeId}" title="Compartilhar no WhatsApp">
+              <i class="fab fa-whatsapp"></i>
+            </button>
+            <div class="comments" id="comments-${episodeId}"></div>
+          `;
 
-        episodeDiv.querySelector('.episode-img').addEventListener('click', function() {
-          const modal = document.getElementById('video-modal');
-          const iframe = document.getElementById('video-player');
-          iframe.src = episode.videoLink;
-          modal.style.display = 'flex';
-        });
+          episodeDiv.innerHTML = episodeContent;
+          podcastList.appendChild(episodeDiv);
 
-        document.getElementById('close-video-btn').addEventListener('click', function() {
-          const modal = document.getElementById('video-modal');
-          const iframe = document.getElementById('video-player');
-          iframe.src = '';
-          modal.style.display = 'none';
-        });
+          episodeDiv.querySelector('.episode-img').addEventListener('click', function () {
+            const modal = document.getElementById('video-modal');
+            const iframe = document.getElementById('video-player');
+            iframe.src = episode.videoLink;
+            modal.style.display = 'flex';
+          });
 
-        episodeDiv.querySelector('.like-btn').addEventListener('click', function() {
-          const episodeId = this.getAttribute('data-episode-id');
-          addLike(episodeId);
-        });
+          document.getElementById('close-video-btn').addEventListener('click', function () {
+            const modal = document.getElementById('video-modal');
+            const iframe = document.getElementById('video-player');
+            iframe.src = '';
+            modal.style.display = 'none';
+          });
 
-        episodeDiv.querySelector('.comment-btn').addEventListener('click', function() {
-          const episodeId = this.getAttribute('data-episode-id');
-          const commentText = prompt('Escreva seu comentário:');
-          if (commentText) {
-            addComment(episodeId, commentText);
-            loadComments(episodeId);
-          }
-        });
+          episodeDiv.querySelector('.like-btn').addEventListener('click', function () {
+            const episodeId = this.getAttribute('data-episode-id');
+            addLike(episodeId);
+          });
 
-        episodeDiv.querySelector('.toggle-comments-btn').addEventListener('click', function() {
-          const episodeId = this.getAttribute('data-episode-id');
-          toggleComments(episodeId);
-        });
+          episodeDiv.querySelector('.comment-btn').addEventListener('click', function () {
+            const episodeId = this.getAttribute('data-episode-id');
+            const userName = getUserName();
+            const commentText = prompt('Escreva seu comentário:');
+            if (commentText) {
+              addComment(episodeId, userName, commentText);
+              loadComments(episodeId);
+            }
+          });
 
+          episodeDiv.querySelector('.toggle-comments-btn').addEventListener('click', function () {
+            const episodeId = this.getAttribute('data-episode-id');
+            toggleComments(episodeId);
+          });
 
-        episodeDiv.querySelector('.whatsapp-btn').addEventListener('click', function() {
-          const episodeId = this.getAttribute('data-episode-id');
-          const ep = episodes[episodeId]; 
-          const message = `🎧 *Confira esse episódio incrível do PartnerCast!*\n\n📌 *${ep.title}*\n\n👉 Acesse agora: https://atec7.github.io/PartnerCast/`;
-          const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-          window.open(url, '_blank');
-        });
+          episodeDiv.querySelector('.whatsapp-btn').addEventListener('click', function () {
+            const episodeId = this.getAttribute('data-episode-id');
+            const ep = episodes[episodeId];
+            const message = `🎧 *Confira esse episódio incrível do PartnerCast!*\n\n📌 *${ep.title}*\n\n👉 Acesse agora: https://atec7.github.io/PartnerCast/`;
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+          });
 
-        loadComments(episodeId);
+          loadComments(episodeId);
+        }
       }
-    }
-  });
-}
-
-function addLike(episodeId) {
-  const episodeRef = ref(database, 'episodes/' + episodeId + '/likes');
-  get(episodeRef).then((snapshot) => {
-    let currentLikes = snapshot.exists() ? snapshot.val() : 0;
-    currentLikes += 1;
-    set(episodeRef, currentLikes).then(() => {
-      document.getElementById(`likes-${episodeId}`).textContent = currentLikes;
     });
-  });
-}
+  }
 
-function addComment(episodeId, commentText) {
-  const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
-  const newCommentRef = push(commentsRef);
-  set(newCommentRef, {
-    text: commentText
-  });
-}
+  function addLike(episodeId) {
+    const episodeRef = ref(database, 'episodes/' + episodeId + '/likes');
+    get(episodeRef).then((snapshot) => {
+      let currentLikes = snapshot.exists() ? snapshot.val() : 0;
+      currentLikes += 1;
+      set(episodeRef, currentLikes).then(() => {
+        document.getElementById(`likes-${episodeId}`).textContent = currentLikes;
+      });
+    });
+  }
 
-function loadComments(episodeId) {
-  const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
-  get(commentsRef).then((snapshot) => {
-    const commentsDiv = document.getElementById('comments-' + episodeId);
-    commentsDiv.innerHTML = '';
-    if (snapshot.exists()) {
-      const comments = snapshot.val();
-      for (let commentId in comments) {
-        const comment = comments[commentId];
-        const commentElement = document.createElement('div');
-        commentElement.classList.add('comment');
-        commentElement.textContent = comment.text;
-        commentsDiv.appendChild(commentElement);
+  function addComment(episodeId, userName, commentText) {
+    const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+    const newCommentRef = push(commentsRef);
+    set(newCommentRef, {
+      name: userName,
+      text: commentText
+    });
+  }
+
+  function loadComments(episodeId) {
+    const commentsRef = ref(database, 'episodes/' + episodeId + '/comments');
+    get(commentsRef).then((snapshot) => {
+      const commentsDiv = document.getElementById('comments-' + episodeId);
+      commentsDiv.innerHTML = '';
+      if (snapshot.exists()) {
+        const comments = snapshot.val();
+        for (let commentId in comments) {
+          const comment = comments[commentId];
+          const commentElement = document.createElement('div');
+          commentElement.classList.add('comment');
+          commentElement.innerHTML = `<strong>${comment.name || 'Anônimo'}:</strong> ${comment.text}`;
+          commentsDiv.appendChild(commentElement);
+        }
+      } else {
+        commentsDiv.innerHTML = 'Nenhum comentário ainda. Seja o primeiro a comentar!';
       }
-    } else {
-      commentsDiv.innerHTML = 'Nenhum comentário ainda. Seja o primeiro a comentar!';
-    }
-  });
-}
+    });
+  }
 
-function toggleComments(episodeId) {
-  const commentsDiv = document.getElementById('comments-' + episodeId);
-  commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
-}
+  function toggleComments(episodeId) {
+    const commentsDiv = document.getElementById('comments-' + episodeId);
+    commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
+  }
 
-loadEpisodes();
-
-  </script>
+  loadEpisodes();
+</script>
 </body>
 </html>
