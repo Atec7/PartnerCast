@@ -445,7 +445,12 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
   let deferredPrompt;
   const installPrompt = document.getElementById('installPrompt');
 
-    // Mostrar o botão de instalação customizado
+  window.addEventListener('beforeinstallprompt', (e) => {
+    // Impede que o mini-infobar apareça automaticamente no Chrome
+    e.preventDefault();
+    deferredPrompt = e;
+
+    // Exibe o botão de instalação personalizado
     installPrompt.style.display = 'block';
   });
 
@@ -463,10 +468,12 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
     }
   });
 
-  // Esconde o botão se o app já estiver instalado
+  // Quando o app for instalado
   window.addEventListener('appinstalled', () => {
     console.log('App instalado');
     installPrompt.style.display = 'none';
+  });
 </script>
+
 </body>
 </html>
