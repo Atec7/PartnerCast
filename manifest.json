@@ -1,24 +1,21 @@
 {
   "name": "PartnerCast",
   "short_name": "PartnerCast",
-  "start_url": "./index.html",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#FFD700",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "logo-partnercast.jpg",
+      "src": "img/logo-partnercast.jpg",
       "sizes": "192x192",
-      "type": "image/jpg"
+      "type": "image/jpeg"
     },
     {
-      "src": "logo-partnercast.jpg",
+      "src": "img/logo-partnercast.jpg",
       "sizes": "512x512",
-      "type": "image/jpg"
+      "type": "image/jpeg"
     }
   ]
 }
-
-
-
