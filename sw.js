@@ -1,4 +1,4 @@
-const CACHE_NAME = 'barbearia-cache-v1';
+const CACHE_NAME = 'PartnerCast-cache-v1';
 const FILES_TO_CACHE = [
   '/',
   '/index.html',
@@ -21,5 +21,4 @@ self.addEventListener('fetch', evt => {
       return response || fetch(evt.request);
     })
   );
-
 });
