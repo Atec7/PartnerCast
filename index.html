@@ -241,6 +241,34 @@
       border-radius: 50%;
       width: 400px;
     }
+     #installPrompt {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    z-index: 9999;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px;
+  }
+
+  /* Estilo verde */
+  .green-style {
+    background: #00ff88;
+    color: #000;
+    box-shadow: 0 0 10px #00ff88aa;
+  }
+
+  /* Estilo preto */
+  .black-style {
+    background: #121212;
+    color: #00ff88;
+    box-shadow: 0 0 10px #00ff88aa;
+  }
   </style>
 </head>
 <body>
@@ -262,9 +290,7 @@
   <main id="podcast-list" class="episode-list">
 
   </main>
-<div id="installPrompt" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-background: #FFD700; color: #121212; padding: 12px 20px; border-radius: 30px;
-font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointer;">
+<div id="installPrompt" class="green-style">
   Instale o nosso Aplicativo no seu celular!📲
 </div>
   <div class="video-modal" id="video-modal">
