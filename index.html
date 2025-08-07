@@ -438,12 +438,12 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
     const commentsDiv = document.getElementById('comments-' + episodeId);
     commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
   }
-let deferredPrompt;
-  const installPrompt = document.getElementById('installPrompt');
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault(); // Impede que o navegador exiba o banner automático
-    deferredPrompt = e;
+  loadEpisodes();
+</script>
+<script>
+  let deferredPrompt;
+  const installPrompt = document.getElementById('installPrompt');
 
     // Mostrar o botão de instalação customizado
     installPrompt.style.display = 'block';
@@ -467,8 +467,6 @@ let deferredPrompt;
   window.addEventListener('appinstalled', () => {
     console.log('App instalado');
     installPrompt.style.display = 'none';
-  loadEpisodes();
 </script>
-
 </body>
 </html>
