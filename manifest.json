@@ -1,6 +1,6 @@
 {
-  "name": "ADM",
-  "short_name": "ADM",
+  "name": "PartnerCast",
+  "short_name": "PartnerCast",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
@@ -8,14 +8,15 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "img/logo.jpg",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "img/logo.jpg"
     },
     {
-      "src": "logo.png",
+      "src": "img/logo.jpg",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/jpg"
     }
   ]
 }
+
