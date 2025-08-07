@@ -10,7 +10,7 @@
     {
       "src": "logo-partnercast.jpg",
       "sizes": "192x192",
-      "type": "logo-partnercast.jpg"
+      "type": "image/jpg"
     },
     {
       "src": "logo-partnercast.jpg",
@@ -19,5 +19,6 @@
     }
   ]
 }
+
 
 
