@@ -8,15 +8,16 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "img/logo.jpg",
+      "src": "logo-partnercast.jpg",
       "sizes": "192x192",
-      "type": "img/logo.jpg"
+      "type": "logo-partnercast.jpg"
     },
     {
-      "src": "img/logo.jpg",
+      "src": "logo-partnercast.jpg",
       "sizes": "512x512",
       "type": "image/jpg"
     }
   ]
 }
+
 
