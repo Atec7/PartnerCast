@@ -258,7 +258,11 @@
     <h1>🎧<i>Partner</i>Cast</h1>
     <p>Grupo Partnership - Rio Verde/GO</p>
   </header>
-
+  <div id="installPrompt" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+background: #FFD700; color: #121212; padding: 12px 20px; border-radius: 30px;
+font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointer;">
+  Instale o nosso Aplicativo <br> no seu celular!📲
+</div>
   <main id="podcast-list" class="episode-list">
 
   </main>
@@ -267,11 +271,7 @@
     <button id="close-video-btn">Fechar</button>
     <iframe id="video-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
-<div id="installPrompt" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-background: #FFD700; color: #121212; padding: 12px 20px; border-radius: 30px;
-font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointer;">
-  Instale o nosso Aplicativo <br> no seu celular!📲
-</div>
+
   <script>
 
     window.addEventListener("load", () => {
@@ -438,11 +438,7 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
     const commentsDiv = document.getElementById('comments-' + episodeId);
     commentsDiv.style.display = commentsDiv.style.display === 'none' ? 'block' : 'none';
   }
-
-  loadEpisodes();
-</script>
-  <script>
-  let deferredPrompt;
+let deferredPrompt;
   const installPrompt = document.getElementById('installPrompt');
 
   window.addEventListener('beforeinstallprompt', (e) => {
@@ -471,7 +467,8 @@ font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointe
   window.addEventListener('appinstalled', () => {
     console.log('App instalado');
     installPrompt.style.display = 'none';
-  });
+  loadEpisodes();
 </script>
+
 </body>
 </html>
