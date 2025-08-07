@@ -3,7 +3,7 @@ const FILES_TO_CACHE = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/logo.jpg',
+  '/logo-partnercast.jpg',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'
 ];
 
@@ -21,4 +21,5 @@ self.addEventListener('fetch', evt => {
       return response || fetch(evt.request);
     })
   );
+
 });
