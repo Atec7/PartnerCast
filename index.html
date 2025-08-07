@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" name="theme-color" content="#FFD700"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json" />
+
   <title>PartnerCast</title>
   <style>
 
@@ -265,7 +267,11 @@
     <button id="close-video-btn">Fechar</button>
     <iframe id="video-player" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
   </div>
-
+<div id="installPrompt" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+background: #FFD700; color: #121212; padding: 12px 20px; border-radius: 30px;
+font-weight: bold; box-shadow: 0 0 10px #FFD700aa; z-index: 9999; cursor: pointer;">
+  Instale o nosso Aplicativo <br> no seu celular!📲
+</div>
   <script>
 
     window.addEventListener("load", () => {
@@ -434,6 +440,38 @@
   }
 
   loadEpisodes();
+</script>
+  <script>
+  let deferredPrompt;
+  const installPrompt = document.getElementById('installPrompt');
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault(); // Impede que o navegador exiba o banner automático
+    deferredPrompt = e;
+
+    // Mostrar o botão de instalação customizado
+    installPrompt.style.display = 'block';
+  });
+
+  installPrompt.addEventListener('click', async () => {
+    installPrompt.style.display = 'none';
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('Usuário aceitou instalar');
+      } else {
+        console.log('Usuário recusou instalar');
+      }
+      deferredPrompt = null;
+    }
+  });
+
+  // Esconde o botão se o app já estiver instalado
+  window.addEventListener('appinstalled', () => {
+    console.log('App instalado');
+    installPrompt.style.display = 'none';
+  });
 </script>
 </body>
 </html>
