@@ -293,7 +293,10 @@ header {
     width: 80%;
   }
 }
-
+.dev{
+  color: white;
+  font-size: 10px;
+}
   </style>
 </head>
 <body>
@@ -310,6 +313,7 @@ header {
   <header>
     <h1>🎧<i>Partner</i>Cast</h1>
     <p>Grupo Partnership - Rio Verde/GO</p>
+    <p class="dev" >Arnaldo S. Lima - Todos os direitos reservados</p>
   </header>
   
   <main id="podcast-list" class="episode-list">
@@ -352,7 +356,7 @@ header {
   function getUserName() {
     let userName = localStorage.getItem('userName');
     if (!userName) {
-      userName = prompt('🤔Qual seu nome?');
+      userName = prompt('Nome:');
       if (userName) {
         localStorage.setItem('userName', userName);
       } else {
